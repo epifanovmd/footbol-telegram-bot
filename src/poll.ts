@@ -12,9 +12,11 @@ export let activePoll: {
   votesFromMessage: number;
 } | null = null;
 
+const getDate = () => moment().utcOffset(3);
+
 export const createPoll = async (ctx: Context) => {
   if (activePoll) {
-    if (moment().utcOffset(3).isAfter(activePoll.date, "days")) {
+    if (getDate().isAfter(activePoll.date, "days")) {
       await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
 
       activePoll = null;
@@ -23,7 +25,7 @@ export const createPoll = async (ctx: Context) => {
     }
   }
 
-  const currentDate = moment().utcOffset(3);
+  const currentDate = getDate();
   const weekday = currentDate.weekday();
   const isLimitedDay = weekday === 1 || weekday === 3 || weekday === 5;
 
@@ -42,7 +44,7 @@ export const createPoll = async (ctx: Context) => {
 
   if (ctx.chat) {
     activePoll = {
-      date: moment().utcOffset(3).toDate(),
+      date: getDate().toDate(),
       pollId: poll.poll.id,
       chatId: ctx.chat.id,
       messageId: poll.message_id,
@@ -53,7 +55,7 @@ export const createPoll = async (ctx: Context) => {
 };
 
 const checkStopVote = async (ctx: Context) => {
-  const currentDate = moment();
+  const currentDate = getDate();
   const weekday = currentDate.weekday();
   const isLimitedDay = weekday === 1 || weekday === 3 || weekday === 5;
 
