@@ -14,7 +14,7 @@ export let activePoll: {
 
 export const createPoll = async (ctx: Context) => {
   if (activePoll) {
-    if (moment().isAfter(activePoll.date, "days")) {
+    if (moment().utcOffset(3).isAfter(activePoll.date, "days")) {
       await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
 
       activePoll = null;
@@ -23,7 +23,7 @@ export const createPoll = async (ctx: Context) => {
     }
   }
 
-  const currentDate = moment();
+  const currentDate = moment().utcOffset(3);
   const weekday = currentDate.weekday();
   const isLimitedDay = weekday === 1 || weekday === 3 || weekday === 5;
 
@@ -42,7 +42,7 @@ export const createPoll = async (ctx: Context) => {
 
   if (ctx.chat) {
     activePoll = {
-      date: moment().toDate(),
+      date: moment().utcOffset(3).toDate(),
       pollId: poll.poll.id,
       chatId: ctx.chat.id,
       messageId: poll.message_id,

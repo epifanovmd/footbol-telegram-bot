@@ -30,8 +30,6 @@ const start = async () => {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
 
-          console.log("moment", moment().utcOffset(4).format("HH:mm:ss"));
-
           await createPoll(ctx);
 
           // Правило: каждый день в 12:00 по Москве
@@ -45,7 +43,9 @@ const start = async () => {
             await createPoll(ctx);
           });
 
-          await ctx.reply(`${moment().format("DD.MM.YYYY HH:mm")}`);
+          await ctx.reply(
+            `${moment().utcOffset(3).format("DD.MM.YYYY HH:mm")}`,
+          );
           await ctx.reply(startText);
         }
       }
