@@ -31,12 +31,12 @@ const start = async () => {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
           await createPoll(ctx);
-          ctx.reply(`${moment().format("DD.MM.YYYY hh:mm")}`);
           // Ежедневно в 12:00
           schedule.scheduleJob("0 12 * * *", async () => {
             await createPoll(ctx);
           });
 
+          await ctx.reply(`${moment().format("DD.MM.YYYY hh:mm")}`);
           await ctx.reply(startText);
         }
       }
