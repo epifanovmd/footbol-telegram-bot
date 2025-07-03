@@ -1,0 +1,57 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "types": ["vite/client", "reflect-metadata"],
+    // Custom
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "noImplicitReturns": true,
+    "preserveSymlinks": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@api": ["./src/api"],
+      "@api/*": ["./src/api/*"],
+      "@common": ["./src/common"],
+      "@common/*": ["./src/common/*"],
+      "@components": ["./src/components"],
+      "@components/*": ["./src/components/*"],
+      "@models": ["./src/models"],
+      "@models/*": ["./src/models/*"],
+      "@service": ["./src/service"],
+      "@service/*": ["./src/service/*"],
+      "@store": ["./src/store"],
+      "@store/*": ["./src/store/*"],
+      "@theme": ["./src/theme"],
+      "@theme/*": ["./src/theme/*"],
+      "@routes": ["./src/routes"],
+      "@routes/*": ["./src/routes/*"]
+    }
+  },
+  "include": ["./src/**/*", "./scripts"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist"
+  ]
+}
