@@ -31,8 +31,15 @@ const start = async () => {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
           await createPoll(ctx);
+
+          // Правило: каждый день в 12:00 по Москве
+          const rule = new schedule.RecurrenceRule();
+          rule.hour = 2; // 12 часов
+          rule.minute = 21; // 0 минут
+          rule.tz = "Europe/Moscow"; // Указываем часовой пояс
+
           // Ежедневно в 12:00
-          schedule.scheduleJob("0 12 * * *", async () => {
+          schedule.scheduleJob(rule, async () => {
             await createPoll(ctx);
           });
 
