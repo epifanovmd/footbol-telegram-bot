@@ -36,7 +36,7 @@ const start = async () => {
             await createPoll(ctx);
           });
 
-          await ctx.reply(`${moment().format("DD.MM.YYYY hh:mm")}`);
+          await ctx.reply(`${moment().format("DD.MM.YYYY HH:mm")}`);
           await ctx.reply(startText);
         }
       }
