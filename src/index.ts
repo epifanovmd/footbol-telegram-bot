@@ -26,19 +26,17 @@ const start = async () => {
     subscribePoll();
 
     bot.command("start", async ctx => {
-      console.log("sss", moment().format("DD.MM.YYYY HH:mm"));
       if (ctx.chatId) {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
-          // await createPoll(ctx);
 
           // Правило: каждый день в 12:00 по Москве
           const rule = new schedule.RecurrenceRule();
-          rule.hour = 2; // 12 часов
-          rule.minute = 21; // 0 минут
+          rule.hour = 12; // 12 часов
+          rule.minute = 0; // 0 минут
           rule.tz = "Europe/Moscow"; // Указываем часовой пояс
 
-          // Ежедневно в 12:00
+          // Ежедневно в 12:00 по Москве
           schedule.scheduleJob(rule, async () => {
             await createPoll(ctx);
           });

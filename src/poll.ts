@@ -60,7 +60,7 @@ const checkStopVote = async (ctx: Context) => {
   if (activePoll && isLimitedDay) {
     const votes = activePoll.votesFromMessage + activePoll.pollVotes;
 
-    if (votes >= 2) {
+    if (votes >= 18) {
       try {
         await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
         await ctx.api.sendMessage(
