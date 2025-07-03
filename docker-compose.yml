@@ -1,0 +1,8 @@
+services:
+  football-telegram-bot:
+    build: .
+    container_name: football-telegram-bot
+    restart: unless-stopped
+
+volumes:
+  react-vite:
