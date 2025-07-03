@@ -30,7 +30,7 @@ const start = async () => {
       if (ctx.chatId) {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
-          await createPoll(ctx);
+          // await createPoll(ctx);
 
           // Правило: каждый день в 12:00 по Москве
           const rule = new schedule.RecurrenceRule();
