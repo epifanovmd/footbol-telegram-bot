@@ -26,6 +26,7 @@ const start = async () => {
     subscribePoll();
 
     bot.command("start", async ctx => {
+      console.log("sss", moment().format("DD.MM.YYYY hh:mm"));
       if (ctx.chatId) {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
