@@ -29,7 +29,7 @@ export const createPoll = async (ctx: Context) => {
 
   const dayOfWeek = currentDate.format("dddd");
   const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
-  const pollName = `${capitalizedDay} 20:00 ${!isLimitedDay ? "(Макс. 18 человек)" : ""}`;
+  const pollName = `${capitalizedDay} 20:00 ${isLimitedDay ? "(Макс. 18 человек)" : ""}`;
 
   const poll = await ctx.replyWithPoll(
     pollName,
@@ -53,7 +53,11 @@ export const createPoll = async (ctx: Context) => {
 };
 
 const checkStopVote = async (ctx: Context) => {
-  if (activePoll) {
+  const currentDate = moment();
+  const weekday = currentDate.weekday();
+  const isLimitedDay = weekday === 1 || weekday === 3 || weekday === 5;
+
+  if (activePoll && isLimitedDay) {
     const votes = activePoll.votesFromMessage + activePoll.pollVotes;
 
     if (votes >= 2) {
