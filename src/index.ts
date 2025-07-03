@@ -30,6 +30,10 @@ const start = async () => {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
 
+          console.log("moment", moment().utcOffset(4).format("HH:mm:ss"));
+
+          await createPoll(ctx);
+
           // Правило: каждый день в 12:00 по Москве
           const rule = new schedule.RecurrenceRule();
           rule.hour = 12; // 12 часов
