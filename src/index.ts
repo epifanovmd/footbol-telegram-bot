@@ -2,12 +2,8 @@ import moment from "moment";
 import schedule from "node-schedule";
 
 import { bot } from "./bot.ts";
-import {
-  activePoll,
-  createPoll,
-  receiveMessageVote,
-  subscribePoll,
-} from "./poll.ts";
+import { createPoll, receiveMessageVote, subscribePoll } from "./poll.ts";
+import { PollMap } from "./pollsStorage.ts";
 
 moment.locale("ru");
 
@@ -16,17 +12,20 @@ const running = new Set<number>();
 let timerId: any = null;
 let messagesCount = 0;
 
-const startText = `Бот запущен... \n
-Ежедневно в 12:00 будет создаваться опрос\n\n
-Для учета игроков отсутствующих в группе ВО ВРЕМЯ 
-голосования необходимо написать в  чат "Со мной +1"`;
+const NOT_ACCEPT_MESSAGE =
+  "Братуха, я работаю только с командами!\n\nДобавь меня в свою группу, и я буду создавать и управлять опросами для сбора игроков каждый день в 12:00";
 
 const start = async () => {
   try {
     subscribePoll();
 
     bot.command("start", async ctx => {
-      if (ctx.chatId) {
+      if (ctx.message) {
+        await ctx.api.deleteMessage(ctx.chatId, ctx.message?.message_id);
+      }
+
+      await createPoll(ctx);
+      if (ctx.chat.type === "supergroup") {
         if (!running.has(ctx.chatId)) {
           running.add(ctx.chatId);
 
@@ -40,39 +39,45 @@ const start = async () => {
           schedule.scheduleJob(rule, async () => {
             await createPoll(ctx);
           });
-
-          await ctx.reply(startText);
         }
+      } else {
+        await ctx.reply(NOT_ACCEPT_MESSAGE);
       }
     });
 
     bot.on("message", async ctx => {
-      await receiveMessageVote(ctx);
+      if (ctx.chat.type === "supergroup") {
+        await receiveMessageVote(ctx);
 
-      if (activePoll) {
-        if (messagesCount > 10) {
-          if (timerId) clearTimeout(timerId);
+        const activePoll = PollMap.get(ctx.chatId);
 
-          timerId = setTimeout(
-            async () => {
-              if (activePoll) {
-                try {
-                  await ctx.api.forwardMessage(
-                    activePoll.chatId,
-                    activePoll.chatId,
-                    activePoll.messageId,
-                  );
-                  messagesCount = 0;
-                } catch {
-                  //
+        if (activePoll) {
+          if (messagesCount > 10) {
+            if (timerId) clearTimeout(timerId);
+
+            timerId = setTimeout(
+              async () => {
+                if (activePoll) {
+                  try {
+                    await ctx.api.forwardMessage(
+                      activePoll.chatId,
+                      activePoll.chatId,
+                      activePoll.messageId,
+                    );
+                    messagesCount = 0;
+                  } catch {
+                    //
+                  }
                 }
-              }
-            },
-            5 * 60 * 1000,
-          );
-        } else {
-          messagesCount += 1;
+              },
+              5 * 60 * 1000,
+            );
+          } else {
+            messagesCount += 1;
+          }
         }
+      } else {
+        await ctx.reply(NOT_ACCEPT_MESSAGE);
       }
     });
 
