@@ -94,6 +94,7 @@ const checkStopVote = async (chatId: number, ctx: Context) => {
 
 export const subscribePoll = () => {
   bot.on("poll", async ctx => {
+    console.log("ctx", ctx);
     const poll = Array.from(PollMap.values()).find(
       poll => poll.pollId === ctx.poll.id,
     );
