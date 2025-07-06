@@ -20,11 +20,9 @@ const start = async () => {
     subscribePoll();
 
     bot.command("start", async ctx => {
-      await createPoll(ctx);
-
-      // if (ctx.message) {
-      //   await ctx.api.deleteMessage(ctx.chatId, ctx.message?.message_id);
-      // }
+      if (ctx.message) {
+        await ctx.api.deleteMessage(ctx.chatId, ctx.message?.message_id);
+      }
 
       if (ctx.chat.type === "supergroup") {
         if (!running.has(ctx.chatId)) {
