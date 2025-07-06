@@ -11,7 +11,7 @@ interface IPoll {
 
 export const PollMap = new Map<number, IPoll>();
 
-const filename = "./polls.json";
+const filename = "./json/polls.json";
 
 export const savePollsToFile = () => {
   try {

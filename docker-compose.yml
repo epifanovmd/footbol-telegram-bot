@@ -2,7 +2,9 @@ services:
   football-telegram-bot:
     build: .
     container_name: football-telegram-bot
+    volumes:
+      - ./json:/app/json
     restart: unless-stopped
 
 volumes:
-  react-vite:
+  football-telegram-bot:
