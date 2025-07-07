@@ -98,6 +98,9 @@ export const subscribePoll = () => {
       poll => poll.pollId === ctx.poll.id,
     );
 
+    console.log("ctx.poll.id", ctx.poll.id);
+    console.log("poll", poll);
+
     if (poll) {
       const currentPollVotes =
         ctx.poll.options.find(item => item.text === "+")?.voter_count ?? 0;
