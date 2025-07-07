@@ -94,22 +94,23 @@ const checkStopVote = async (chatId: number, ctx: Context) => {
 
 export const subscribePoll = () => {
   bot.on("poll", async ctx => {
-    const poll = Array.from(PollMap.values()).find(
+    const chatId = Array.from(PollMap.values()).find(
       poll => poll.pollId === ctx.poll.id,
-    );
+    )?.chatId;
 
-    console.log("ctx.poll.id", ctx.poll.id);
-    console.log("poll", poll);
+    if (chatId) {
+      const poll = PollMap.get(chatId);
 
-    if (poll) {
-      const currentPollVotes =
-        ctx.poll.options.find(item => item.text === "+")?.voter_count ?? 0;
+      if (poll) {
+        const currentPollVotes =
+          ctx.poll.options.find(item => item.text === "+")?.voter_count ?? 0;
 
-      if (currentPollVotes > poll.pollVotes) {
-        poll.pollVotes = currentPollVotes;
+        if (currentPollVotes > poll.pollVotes) {
+          poll.pollVotes = currentPollVotes;
 
-        savePollsToFile();
-        await checkStopVote(poll.chatId, ctx);
+          savePollsToFile();
+          await checkStopVote(poll.chatId, ctx);
+        }
       }
     }
   });
