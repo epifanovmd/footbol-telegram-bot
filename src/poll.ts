@@ -99,11 +99,15 @@ export const subscribePoll = () => {
     );
 
     if (poll) {
-      poll.pollVotes =
+      const currentPollVotes =
         ctx.poll.options.find(item => item.text === "+")?.voter_count ?? 0;
 
-      savePollsToFile();
-      await checkStopVote(poll.chatId, ctx);
+      if (currentPollVotes > poll.pollVotes) {
+        poll.pollVotes = currentPollVotes;
+
+        savePollsToFile();
+        await checkStopVote(poll.chatId, ctx);
+      }
     }
   });
 };
