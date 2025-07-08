@@ -76,7 +76,9 @@ const checkStopVote = async (chatId: number, ctx: Context) => {
             activePoll.chatId,
             `Опрос завершён! Собралось игроков: ${votes}`,
           )
-          .catch(() => null);
+          .catch(err => {
+            console.log("Error [checkStopVote:sendMessage:stopPoll]:", err);
+          });
 
         PollMap.delete(chatId);
         savePollsToFile();
@@ -85,7 +87,9 @@ const checkStopVote = async (chatId: number, ctx: Context) => {
 
       await ctx.api
         .sendMessage(activePoll.chatId, `Всего голосов: ${votes}`)
-        .catch(() => null);
+        .catch(err => {
+          console.log("Error [checkStopVote:sendMessage:totalVotes]:", err);
+        });
     }
   } catch (err) {
     console.log("Error [checkStopVote]:", err);
@@ -102,6 +106,8 @@ export const subscribePoll = () => {
       const poll = PollMap.get(chatId);
 
       if (poll) {
+        console.log("poll", poll);
+        console.log("ctx.poll", ctx.poll);
         const currentPollVotes =
           ctx.poll.options.find(item => item.text === "+")?.voter_count ?? 0;
 
@@ -112,6 +118,10 @@ export const subscribePoll = () => {
           await checkStopVote(poll.chatId, ctx);
         }
       }
+    } else {
+      console.log(
+        `Warn [subscribePoll]: Не найдено активное голосование для pollId = ${ctx.poll.id}`,
+      );
     }
   });
 };
