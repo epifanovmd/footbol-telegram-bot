@@ -107,8 +107,6 @@ export const subscribePoll = () => {
       const poll = PollMap.get(chatId);
 
       if (poll) {
-        console.log("poll", poll);
-        console.log("ctx.poll", ctx.poll);
         const currentPollVotes =
           ctx.poll.options.find(item => item.text === "+")?.voter_count ?? 0;
 
