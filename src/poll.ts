@@ -71,24 +71,24 @@ const checkStopVote = async (chatId: number, ctx: Context) => {
 
       if (isLimitedDay) {
         if (votes >= MAX_POLL_VOTES) {
-          await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
-          await ctx.api
-            .sendMessage(
-              activePoll.chatId,
-              `Опрос завершён! Собралось игроков: ${votes}`,
-            )
-            .catch(err => {
-              console.log("Error [checkStopVote:sendMessage:stopPoll]:", err);
-            });
+          // await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
+          // await ctx.api
+          //   .sendMessage(
+          //     activePoll.chatId,
+          //     `Опрос завершён! Собралось игроков: ${votes}`,
+          //   )
+          //   .catch(err => {
+          //     console.log("Error [checkStopVote:sendMessage:stopPoll]:", err);
+          //   });
 
           PollMap.delete(chatId);
           savePollsToFile();
         } else {
-          await ctx.api
-            .sendMessage(activePoll.chatId, `Всего голосов: ${votes}`)
-            .catch(err => {
-              console.log("Error [checkStopVote:sendMessage:totalVotes]:", err);
-            });
+          // await ctx.api
+          //   .sendMessage(activePoll.chatId, `Всего голосов: ${votes}`)
+          //   .catch(err => {
+          //     console.log("Error [checkStopVote:sendMessage:totalVotes]:", err);
+          //   });
         }
       }
     }
