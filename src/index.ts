@@ -10,8 +10,8 @@ moment.locale("ru");
 
 const running = new Set<number>();
 
-let timerId: any = null;
-let messagesCount = 0;
+const timerId: any = null;
+const messagesCount = 0;
 
 const NOT_ACCEPT_MESSAGE =
   "Братуха, я работаю только с командами!\n\nДобавь меня в свою группу, и я буду создавать и управлять опросами для сбора игроков каждый день в 12:00";
@@ -55,33 +55,33 @@ const start = async () => {
       if (ctx.chat.type === "supergroup") {
         await receiveMessageVote(ctx);
 
-        const activePoll = PollMap.get(ctx.chatId);
+        // const activePoll = PollMap.get(ctx.chatId);
 
-        if (activePoll) {
-          if (messagesCount > 10) {
-            if (timerId) clearTimeout(timerId);
-
-            timerId = setTimeout(
-              async () => {
-                if (activePoll) {
-                  try {
-                    await ctx.api.forwardMessage(
-                      activePoll.chatId,
-                      activePoll.chatId,
-                      activePoll.messageId,
-                    );
-                    messagesCount = 0;
-                  } catch {
-                    //
-                  }
-                }
-              },
-              5 * 60 * 1000,
-            );
-          } else {
-            messagesCount += 1;
-          }
-        }
+        // if (activePoll) {
+        //   if (messagesCount > 10) {
+        //     if (timerId) clearTimeout(timerId);
+        //
+        //     timerId = setTimeout(
+        //       async () => {
+        //         if (activePoll) {
+        //           try {
+        //             await ctx.api.forwardMessage(
+        //               activePoll.chatId,
+        //               activePoll.chatId,
+        //               activePoll.messageId,
+        //             );
+        //             messagesCount = 0;
+        //           } catch {
+        //             //
+        //           }
+        //         }
+        //       },
+        //       5 * 60 * 1000,
+        //     );
+        //   } else {
+        //     messagesCount += 1;
+        //   }
+        // }
       } else {
         await ctx.reply(NOT_ACCEPT_MESSAGE);
       }
