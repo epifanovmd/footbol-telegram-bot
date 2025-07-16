@@ -5,6 +5,7 @@ import { bot } from "./bot.ts";
 import { PollMap, savePollsToFile } from "./pollsStorage.ts";
 
 const MAX_POLL_VOTES = 18;
+const MAX_POLL_VOTES_FREE = 24;
 
 const getDate = () => moment().utcOffset(3);
 
@@ -62,34 +63,31 @@ const checkStopVote = async (chatId: number, ctx: Context) => {
   try {
     const currentDate = getDate();
     const weekday = currentDate.weekday();
-    const isLimitedDay = weekday === 1 || weekday === 3 || weekday === 5;
 
     const activePoll = PollMap.get(chatId);
 
     if (activePoll) {
       const votes = activePoll.votesFromMessage + activePoll.pollVotes;
 
-      if (isLimitedDay) {
-        if (votes >= MAX_POLL_VOTES) {
-          await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
-          await ctx.api
-            .sendMessage(
-              activePoll.chatId,
-              `Опрос завершён! Собралось игроков: ${votes}`,
-            )
-            .catch(err => {
-              console.log("Error [checkStopVote:sendMessage:stopPoll]:", err);
-            });
+      if (votes >= (weekday === 6 ? MAX_POLL_VOTES_FREE : MAX_POLL_VOTES)) {
+        await ctx.api.stopPoll(activePoll.chatId, activePoll.messageId);
+        await ctx.api
+          .sendMessage(
+            activePoll.chatId,
+            `Опрос завершён! Собралось игроков: ${votes}`,
+          )
+          .catch(err => {
+            console.log("Error [checkStopVote:sendMessage:stopPoll]:", err);
+          });
 
-          PollMap.delete(chatId);
-          savePollsToFile();
-        } else {
-          // await ctx.api
-          //   .sendMessage(activePoll.chatId, `Всего голосов: ${votes}`)
-          //   .catch(err => {
-          //     console.log("Error [checkStopVote:sendMessage:totalVotes]:", err);
-          //   });
-        }
+        PollMap.delete(chatId);
+        savePollsToFile();
+      } else {
+        // await ctx.api
+        //   .sendMessage(activePoll.chatId, `Всего голосов: ${votes}`)
+        //   .catch(err => {
+        //     console.log("Error [checkStopVote:sendMessage:totalVotes]:", err);
+        //   });
       }
     }
   } catch (err) {
