@@ -28,12 +28,15 @@ export const createPoll = async (ctx: Context) => {
 
       const currentDate = getDate();
       const weekday = currentDate.weekday();
-      const isLimitedDay = weekday === 1 || weekday === 3 || weekday === 5;
+      const isOlderAge = weekday === 1 || weekday === 3 || weekday === 5;
+      const description = isOlderAge
+        ? `Взрослые (Макс. ${MAX_POLL_VOTES} человек)`
+        : `Младшие (Макс. ${MAX_POLL_VOTES} человек)`;
 
       const dayOfWeek = currentDate.format("dddd");
       const capitalizedDay =
         dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
-      const pollName = `${capitalizedDay} 20:00 ${isLimitedDay ? "(Макс. 18 человек)" : ""}`;
+      const pollName = `${capitalizedDay} 20:00. ${weekday !== 6 ? description : `(Макс. ${MAX_POLL_VOTES_FREE} человек)`}`;
 
       const poll = await ctx.replyWithPoll(
         pollName,
