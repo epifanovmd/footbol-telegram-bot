@@ -31,7 +31,7 @@ export const createPoll = async (ctx: Context) => {
       const isOlderAge = weekday === 1 || weekday === 3 || weekday === 5;
       const description = isOlderAge
         ? `Взрослые (Макс. ${MAX_POLL_VOTES} человек)`
-        : `Младшие (Макс. ${MAX_POLL_VOTES} человек)`;
+        : `Молодежь (Макс. ${MAX_POLL_VOTES} человек)`;
 
       const dayOfWeek = currentDate.format("dddd");
       const capitalizedDay =
