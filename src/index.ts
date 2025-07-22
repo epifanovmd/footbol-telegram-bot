@@ -21,6 +21,8 @@ const runBot = async (ctx: Context) => {
     if (ctx.chatId && !running.has(ctx.chatId)) {
       running.add(ctx.chatId);
 
+      await createPoll(ctx);
+
       // Правило: каждый день в 12:00 по Москве
       const rule = new schedule.RecurrenceRule();
       rule.hour = 12; // 12 часов
